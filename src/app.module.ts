@@ -37,6 +37,7 @@ import { SqsModule } from '@ssut/nestjs-sqs';
     RequestService,
     OrderRequestService,
     OrderService,
+    ConsumeSqsAdapter,
     {
       provide: 'SqsConsumerInterface',
       useClass: ConsumeSqsAdapter,

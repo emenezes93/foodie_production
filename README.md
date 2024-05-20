@@ -1,73 +1,195 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Foodie Production
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Foodie Production é um microsserviço projetado para gerenciar a fase de produção de pedidos de alimentos. Ele ouve eventos de pagamento de pedidos, atualiza o status do pedido para 'em produção' e se comunica com outros microsserviços para gerenciar o ciclo de vida da produção.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tabela de Conteúdos
 
-## Description
+- [Introdução](#introdução)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instalação](#instalação)
+- [Uso](#uso)
+- [Configuração](#configuração)
+- [Endpoints da API](#endpoints-da-api)
+- [Testes](#testes)
+- [Cobertura de Testes](#cobertura-de-testes)
+- [Docker](#docker)
+- [Contribuindo](#contribuindo)
+- [Licença](#licença)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Introdução
 
-## Installation
+Foodie Production faz parte do projeto FoodieFlow, que visa otimizar o processo de gerenciamento de pedidos de alimentos. Este microsserviço é responsável por rastrear pedidos que estão na fase de produção e garantir que sejam atualizados e comunicados a outras partes do sistema.
+
+## Funcionalidades
+
+- Ouvir eventos de pagamento de pedidos
+- Atualizar status do pedido para 'em produção'
+- Comunicar-se com outros microsserviços para gerenciar o ciclo de vida da produção do pedido
+- Listar todos os pedidos atualmente em produção
+- Marcar pedidos como 'pronto'
+
+## Tecnologias Utilizadas
+
+- NestJS
+- TypeScript
+- SQS (Amazon Simple Queue Service)
+- Jest (para testes)
+- Eslint e Prettier (para qualidade de código)
+- Docker
+
+## Instalação
+
+### Pré-requisitos
+
+- Node.js (>=14.x)
+- npm (>=6.x) ou yarn
+- Docker (para ambiente containerizado)
+
+### Passos
+
+1. Clone o repositório:
+
+    ```bash
+    git clone https://github.com/emenezes93/foodie_production.git
+    cd foodie_production
+    ```
+
+2. Instale as dependências:
+
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
+
+3. Configure as variáveis de ambiente:
+
+    Crie um arquivo `.env` no diretório raiz e configure-o com base no arquivo `.env.example`.
+
+4. Inicie a aplicação:
+
+    ```bash
+    npm run start:dev
+    # ou
+    yarn start:dev
+    ```
+
+## Uso
+
+Para executar a aplicação em um ambiente de desenvolvimento, use o comando de start como mostrado acima. Isso iniciará o servidor e monitorará mudanças nos arquivos.
+
+Para produção, construa a aplicação e inicie-a usando:
 
 ```bash
-$ npm install
+npm run build
+npm run start:prod
+# ou
+yarn build
+yarn start:prod
 ```
 
-## Running the app
+## Configuração
+A configuração pode ser gerenciada usando variáveis de ambiente. Consulte o arquivo .env.example para uma lista de variáveis necessárias.
+
+### Endpoints da API Pedidos
+
+Lista todos os pedidos atualmente em produção.
+
+#### GET /orders/in-production
+
+Atualiza o status de um pedido para 'em produção'.
+
+#### POST /order/preparation
+
+Exemplo de body:
+```bash
+{
+    "id": "2",
+    "status": "2"
+}
+```
+
+Marca um pedido como 'pronto'.
+
+#### POST /order/finish
+
+Exemplo de body:
+```bash
+{
+    "id": "2",
+    "status": "3"
+}
+```
+
+## Testes
+Para executar os testes, use:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run test
+# ou
+yarn test
 ```
-
-## Test
+Para cobertura de testes, use:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run test:cov
+# ou
+yarn test:cov
 ```
 
-## Support
+## Cobertura de Testes
+O projeto visa manter um alto nível de cobertura de testes. Abaixo está o resumo da cobertura:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+File                             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------------------------|---------|----------|---------|---------|-------------------
+All files                        |   92.36 |    92.59 |   93.54 |   90.9  |
+__tests__/domain/use-cases       |     100 |      100 |     100 |     100 |
+ConsumerSqsPortsMock.ts          |     100 |      100 |     100 |     100 |
+order.service.mock.ts            |     100 |      100 |     100 |     100 |
+__tests__/infrastructure/adapters|     100 |      100 |     100 |     100 |
+OrderRequestService.mock.ts      |     100 |      100 |     100 |     100 |
+src                              |    62.5 |    100   |     100 |   59.09 | 1-22
+app.module.ts                    |     100 |      100 |     100 |     100 |
+main.ts                          |       0 |      100 |       0 |       0 |
+src/api/controllers              |     100 |      100 |     100 |     100 |
+consumer-sqs.controller.ts       |     100 |      100 |     100 |     100 |
+health.controller.ts             |     100 |      100 |     100 |     100 |
+order.controller.ts              |     100 |      100 |     100 |     100 |
+src/api/dto                      |     100 |      100 |     100 |     100 |
+consumer-sqs.dto.ts              |     100 |      100 |     100 |     100 |
+src/config                       |     100 |      100 |     100 |     100 |
+config.ts                        |     100 |      100 |     100 |     100 |
+src/domain/use-cases             |     100 |      100 |     100 |     100 |
+order.service.ts                 |     100 |      100 |     100 |     100 |
+sqs.consumer-service.ts          |     100 |      100 |     100 |     100 |
+src/infrastructure/adapters      |     100 |      100 |     100 |     100 |
+consumer-sqs.adapter.ts          |     100 |      100 |     100 |     100 |
+src/infrastructure/axios         |    97.05|    86.66 |     100 |    96.66|
+build.response.ts                |     100 |      100 |     100 |     100 |
+order.request.service.ts         |      95 |   66.66  |      75 |    94.44| 35
+request.service.ts               |      100|   91.66  |     100 |      100| 38
+src/infrastructure/enums         |     100 |      100 |     100 |     100 |
+http.method.enum.ts              |     100 |      100 |     100 |     100 |
+src/infrastructure/interfaces/order|       0|      100|       0|       0 |
+order.request.interface.ts       |       0|      100 |       0 |       0 | 1
 
-## Stay in touch
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Docker
+Para executar a aplicação usando Docker, você pode usar o Dockerfile fornecido no repositório.
 
-## License
+#### Construindo a Imagem Docker
+1 . Construa a imagem Docker:
 
-Nest is [MIT licensed](LICENSE).
+```bash
+docker build -t foodie_production .
+```
+2 . Execute o container Docker:
+
+```bash
+docker run -d -p 3000:3000 --env-file .env foodie_production
+```
+
+Isso iniciará a aplicação no modo de produção no porto 3000.
